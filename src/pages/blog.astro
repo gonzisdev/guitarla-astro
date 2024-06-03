@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Post from '../components/Post.astro';
+
+const url = `${import.meta.env.PUBLIC_API_URL}/posts?populate=imagen`
+const respuesta = await fetch(url)
+const { data } = await respuesta.json()
+---
+
+<Layout title="Blog" description="Página de tienda de instrumentos musicales, guitarras, cursos, blog y más">
+	<main class="contenedor">
+		<h1 class="heading">Blog</h1>
+		<div class="grid">
+			{data?.map(post => (
+				<Post 
+					titulo={post.attributes.titulo} 
+					publishedAt={post.attributes.publishedAt}
+					contenido={post.attributes.contenido}
+					imagen={post.attributes.imagen.data.attributes.formats.medium.url}
+					url={post.attributes.url}			
+				/>
+			))}
+		</div>
+	</main>
+</Layout>
+
+<style>
+	.post {
+    max-width: 80rem;
+    margin: 0 auto;
+	}
+	.contenido {
+		padding: 1.5rem;
+	}
+	.contenido h3 {
+		font-weight: 900;
+		font-size: 2.8rem;
+		margin: 0;
+	}
+	.fecha {
+		font-size: 1.6rem;
+		color: var(--primary);
+	}
+	.resumen {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 4;
+		overflow: hidden;
+	}
+	.texto {
+		white-space: pre-wrap;
+	}
+
+	.mt-3 {
+		margin-top: 3rem;
+	}
+	.enlace {
+		margin-top: 2rem;
+		display: block;
+		background-color: var(--black);
+		color: var(--white);
+		text-decoration: none;
+		padding: 1rem;
+		text-align: center;
+		text-transform: uppercase;
+		font-size: 1.4rem;
+		font-weight: 700;
+		transition-property: background-color;
+		transition-duration: 300ms;
+	}
+	.enlace:hover {
+		background-color: var(--primary);
+	}
+</style>
